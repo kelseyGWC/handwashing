@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Germ Attack!!</title>
+
+	<!-- adjusting to the phone's screen -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- jQuery mobile style sheet -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css">
+
+	<!-- jQuery and jQuery mobile -->
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+
+	<!-- add ProcessingJS -->
+	<script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
+	
+	<style>
+		.ui-page {
+			background:#CC99FF
+		} 
+		div.absolute {
+			position: absolute;
+			bottom: 15%;
+			text-align: center;
+			width: 900px;
+			height: 200px;
+			font-size: 50px; 
+			font-family: Impact;
+			<!--border: 3px solid #8AC007;-->
+		}
+		div.butt {
+			position: absolute;
+			bottom: 50%;
+			right: 45%;
+			width: 100px;
+			height: 50px;
+			<!--border: 3px solid #8AC007;-->
+		}
+		div.butt2 {
+			position: absolute;
+			bottom: 50%;
+			right: 35%;
+			width: 100px;
+			height: 50px;
+			<!--border: 3px solid #8AC007;-->
+		}
+	</style>
+</head>
+
+<body>
+	<div data-role="header">
+		<h1>Scroller</h1>
+		<h1>Battle the King Germ!</h1>
+	</div><!-- /header -->
+	
+	<div data-role="content" align="center">
+		<canvas id="scrollerCanvas"></canvas>
+	</div><!-- /content -->
+	
+
+	<div data-role="footer">
+		<h4><a id="button" href="#">Home</a></h4>
+	</div><!-- /footer -->
+	
+	<script type="text/processing" data-processing-target="scrollerCanvas">
+		var Person = function(x,y,size,xSpeed) {
+			this.x = x;
+			this.y = y;
+			this.size = size;
+			this.xSpeed = xSpeed;
+			
+			this.drawPerson = function(){
+				fill(0,255,0);
+				rect(this.x,this.y,this.size,this.size);		
+			}
+		}
+		
+		var person;
+
+		
+		void keyPressed(){
+			//console.log(keyCode);
+			if (keyCode === 32) { // space
+				person.xSpeed = -1;	
+			}
+		}
+		
+		void keyReleased(){
+			//console.log(keyCode);
+			if (keyCode === 32) {
+				person.xSpeed = 1;
+			}
+		}
+
+		
+		
+		var Trash = function(x,y,size,xSpeed) {
+			this.x = x;
+			this.y = y;
+			this.size = size;
+			this.xSpeed = xSpeed;
+			
+			this.drawTrash = function(){
+				fill(0,0,0);
+				rect(this.x,this.y,this.size,this.size);		
+			}
+				
+			this.moveTrash = function(){
+				this.x -= xSpeed;
+				counter  = 0
+				 if (this.x < -30) {
+					this.x = 500;
+				}
+			}
+		}
+		
+		var trash;
+		
+
+		void setup(){
+			size(500,500);
+			trash = [];
+			for(var i = 0; i < 5; i++){
+				trash.push(new Trash(random(200,455), random(25, 500), 30, random(4,10)));
+			}
+			person = new Person(200, 200, 50, 2);
+		}
+
+		void draw(){  
+			background(180,255,255);
+			for(var i = 0; i < trash.length; i++){
+				trash[i].drawTrash();
+				trash[i].moveTrash();
+				if (trash[i].x < person.x + person.width  && trash[i].x + trash[i].width  > person.x &&
+					trash[i].y < person.y + person.height && trash[i].y + trash[i].height > person.y) {
+					console.log("you lost"); 
+				}
+				person.drawPerson();
+				person.y += person.xSpeed;
+				//console.log(person.y);
+				if (person.y > 450) {
+					person.xSpeed = 0;
+				}	
+			}
+		}		
+
+		$("#button").click(function() {
+			location.href = "index.html";
+		});
+		
+	</script>
+
+</body>
+</html>

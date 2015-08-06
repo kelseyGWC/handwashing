@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Germ Attack!!</title>
+
+	<!-- adjusting to the phone's screen -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- jQuery mobile style sheet -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css">
+
+	<!-- jQuery and jQuery mobile -->
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+
+	<!-- add ProcessingJS -->
+	<script src="http://cloud.github.com/downloads/processing-js/processing-js/processing-1.4.1.min.js"></script>
+	
+	<style>
+		.ui-page {
+			background:#CC99FF
+		} 
+		div.absolute {
+			position: absolute;
+			bottom: 15%;
+			text-align: center;
+			width: 900px;
+			height: 200px;
+			font-size: 50px; 
+			font-family: Impact;
+			<!--border: 3px solid #8AC007;-->
+		}
+		div.butt {
+			position: absolute;
+			bottom: 50%;
+			right: 45%;
+			width: 100px;
+			height: 50px;
+			<!--border: 3px solid #8AC007;-->
+		}
+		div.butt2 {
+			position: absolute;
+			bottom: 50%;
+			right: 35%;
+			width: 100px;
+			height: 50px;
+			<!--border: 3px solid #8AC007;-->
+		}
+	</style>
+</head>
+
+<body>
+
+	<div data-role="header">
+		<h1>This is where the hand will go</h1>
+	</div><!-- /header -->
+
+	<div data-role="content" align="center">
+		<canvas id="mycanvas"></canvas>
+	</div><!-- /content -->
+
+	<div data-role="footer">
+		<h4><a id="button" href="#">Home</a><h4>
+	</div><!-- /footer -->
+
+	<script type="text/processing" data-processing-target="mycanvas">
+		var windowWidth = $(window).width();
+		var windowHeight = $(window).height();
+	
+		
+		var Germ = function(xPosition, yPosition, myPic){
+			this.xPosition = xPosition;
+			this.yPosition = yPosition;
+			this.image = loadImage(myPic);
+			
+			this.drawGerm = function(){
+				image(this.image, this.xPosition, this.yPosition, 50, 50);
+			}
+
+			this.move = function(){
+				this.xPosition += random(-0.5,0.5);
+				this.xPosition %= windowWidth;
+				this.yPosition += random(-0.5,0.5);
+				this.yPosition %= windowHeight;
+			}
+		}
+
+		var germ = []; 
+		var germImages = ["http://germpictures.weebly.com/uploads/4/4/9/8/44984345/3018634_orig.png", "http://germpictures.weebly.com/uploads/4/4/9/8/44984345/7573559_orig.png"];
+		for(var i = 0; i < round(random(10, 20)); i++){
+			germ.push(new Germ(random(0, 500), random(0, 500), germImages[round(random(0,1))]));
+		}	
+		
+		var kingGerm = new Germ(300, 300, "http://germpictures.weebly.com/uploads/4/4/9/8/44984345/488552_orig.png");
+
+		void setup(){
+			size(windowWidth,$(window).height());
+		};
+		
+		var backgroundPic = loadImage("http://germpictures.weebly.com/uploads/4/4/9/8/44984345/3279473_orig.jpg");
+		void draw(){  
+			image(backgroundPic,0,0,windowWidth,windowHeight);
+		  	for(var i = 0; i < germ.length; i++){
+				germ[i].drawGerm();
+				germ[i].move();
+			}	
+		  	kingGerm.drawGerm();
+		  	kingGerm.move();
+		}
+
+		$("#button").click(function() {
+			location.href = "index.html";
+		});
+
+	</script>
+
+</body>
+</html>
